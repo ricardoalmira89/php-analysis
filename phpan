@@ -41,7 +41,7 @@ function count_issues(){
 
 # Imprime todas las issues encontradas de un topico
 function show_issue(){
-    echo "$Red $1 [ Count: $(cat phan.log | grep -E "$1" | awk -F ' ' '{print $1}' | wc -l) ]"
+    echo "$Red $1 [ Count: $(cat $SCRIPT_DIR/phan.log | grep -E "$1" | awk -F ' ' '{print $1}' | wc -l) ]"
     echo "================================================================================"
     echo "$White"
     cat $SCRIPT_DIR/phan.log | grep -E "$1" | awk -F ' ' '{print $1}'
