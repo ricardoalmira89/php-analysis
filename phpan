@@ -14,6 +14,7 @@ function show_help(){
     echo "      --show <issue-name> Show the issue with the given name"
     echo "      --count             Count the number of issues"
     echo "      --list              Show a list of available issue names"
+    echo "      --info <issue-name> Show information about the issue with the given name (requires mdless)"
     echo -e "Examples:"
     echo "./check.sh --count"
     echo "./check.sh --show PhanCommentDuplicateParam"
@@ -24,6 +25,15 @@ function show_help(){
 # Corre el analisis de codigo estatico y lo almacena en phan.log
 function run_analysis(){
     phan -l $1 > $SCRIPT_DIR/phan.log
+}
+
+function getIssueId(){
+  mdless -l $SCRIPT_DIR/doc/Issue-Types-Caught-by-Phan.md | grep "$1" | awk -F ':' '{print $1}'
+}
+
+function show_issueinfo(){
+  issueId=$(getIssueId $1)
+  mdless -s $issueId $SCRIPT_DIR/doc/Issue-Types-Caught-by-Phan.md
 }
 
 # Lee todas las posibles issues y crea una lista
@@ -69,3 +79,13 @@ if [ "$1" == "--list" ]; then
     cat issues | less
     exit 0
 fi
+
+if [ "$1" == "--info" ]; then
+    show_issueinfo $2
+    exit 0
+fi
+
+
+
+
+
