@@ -10,6 +10,6 @@ PATH=$PATH:/home/user/.config/composer/vendor/bin
 
 4) phan --version
 
-5) chmod +x check.sh
+5) chmod +x phpan
 
 6) ./check.sh --help

@@ -4,10 +4,11 @@ Red=$'\e[1;31m'
 Green=$'\e[1;32m'
 Blue=$'\e[1;34m'
 White=$'\e[1;36m'
+SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
 
 # Shows help
 function show_help(){
-    echo "Usage: check.sh <path> [<options>]"
+    echo "Usage: phpan <path> [<options>]"
     echo "  <options>  "
     echo "      --run  <path>       Runs the static code analysis on the given path and store the result"
     echo "      --show <issue-name> Show the issue with the given name"
@@ -22,29 +23,28 @@ function show_help(){
 
 # Corre el analisis de codigo estatico y lo almacena en phan.log
 function run_analysis(){
-    phan -l $1 > phan.log
+    phan -l $1 > $SCRIPT_DIR/phan.log
 }
 
 # Lee todas las posibles issues y crea una lista
 function count_issues(){
 
-    read file issues and do while with each line
+    #read file issues and do while with each line
     while read -r line; do
-        total=$(cat phan.log | grep -E "$line" | wc -l)
+        total=$(cat $SCRIPT_DIR/phan.log | grep -E "$line" | wc -l)
         if [ $total -gt 0 ]; then
             echo -e "$line: $total"
         fi
-    done < issues
+    done < $SCRIPT_DIR/issues
 
 }
 
 # Imprime todas las issues encontradas de un topico
 function show_issue(){
-    echo -e "\n"
     echo "$Red $1 [ Count: $(cat phan.log | grep -E "$1" | awk -F ' ' '{print $1}' | wc -l) ]"
     echo "================================================================================"
     echo "$White"
-    cat phan.log | grep -E "$1" | awk -F ' ' '{print $1}'
+    cat $SCRIPT_DIR/phan.log | grep -E "$1" | awk -F ' ' '{print $1}'
 }
 
 if [ "$1" == "-h" ] || [ "$1" == "--help" ]; then
